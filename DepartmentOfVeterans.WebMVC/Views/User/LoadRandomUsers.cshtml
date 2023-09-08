@@ -1,0 +1,79 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model RandomUser
+
+@{
+    ViewData["Title"] = "Load users from RandomUse API";
+}
+
+<h2>RandomUse APIs</h2>
+<a asp-action="LoadRandomUsers" class="btn btn-sm btn-primary">Load 10 random users</a>
+<a asp-action="Index" class="btn btn-sm btn-secondary">Back</a>
+
+<table class="table table-sm table-striped table-bordered m-2">
+    <thead>
+        <tr>
+            <th>User name</th>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Avatar</th>
+            <th>Add</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model.results)
+        {
+            <tr id="@r.login.uuid">
+                <td>@r.login.username</td>
+                <td>@r.email</td>
+                <td>@r.name.first</td>
+                <td>@r.name.last</td>
+                <td>@r.gender</td>
+                <td><img src="@r.picture.medium" /></td>
+                <td>
+                    <input class="btn btn-primary" type="button" id="@r.login.uuid" value="Save" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function (){
+        $('input[type=button]').click(function () {            
+            //trid = $(this).closest('tr').attr('id'); // table row ID
+            var bid = (this.id); // button ID
+            var td = $(this).closest('tr').find('td');
+            
+            let formData = {
+                usename: td.eq(0).text(),
+                email: td.eq(1).text(),
+                firstname: td.eq(2).text(),
+                lastname: td.eq(3).text(),
+                gender: td.eq(4).text(),
+                avatar: td.eq(5).find('img').attr('src')
+            }
+
+            console.log(formData)
+            $.ajax({
+                url: "/User/SaveUserAjax",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    alert(response);
+                    $(this).prop("disable", true);  // disable button if save successfully
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+            
+        });
+    });
+
+</script>

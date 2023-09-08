@@ -1,0 +1,48 @@
+﻿@model UserViewModel
+@{
+    ViewBag.Title = "Update user";
+}
+
+<h2>Update user</h2>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Username">Id</label>
+        <input class="form-control" asp-for="UserId" readonly />
+    </div>
+    <div class="form-group">
+        <label for="Username">Username</label>
+        <input class="form-control" asp-for="UserName"/>
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input class="form-control" asp-for="UserPassword" />
+    </div>
+    <div class="form-group">
+        <label for="UserEmail">Email</label>
+        <input class="form-control" asp-for="UserEmail" />
+    </div>
+    <div class="form-group">
+        <label for="FirstName">First Name </label>
+        <input class="form-control" asp-for="FirstName" />
+    </div>
+    <div class="form-group">
+        <label for="LastName">Last Name</label>
+        <input class="form-control" asp-for="LastName" />
+    </div>
+    <div class="form-group">
+        <label for="Picture">Picture</label>
+        <input class="form-control" asp-for="Picture" />
+    </div>
+    <div class="form-group">
+        <label for="Gender">Gender</label>
+        <input class="form-control" asp-for="Gender" />
+    </div>
+    <br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-sm btn-primary">Update</button>
+        <a class="btn btn-sm btn-secondary" asp-action="Index">Back</a>
+    </div>
+</form>

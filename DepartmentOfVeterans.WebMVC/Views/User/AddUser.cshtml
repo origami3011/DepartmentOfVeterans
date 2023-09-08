@@ -1,0 +1,45 @@
+﻿@model UserViewModel
+@{
+    ViewBag.Title = "Add new user";
+}
+<h2>Add user</h2>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="AddUser" method="post">
+    <div class="form-group">
+        <label for="Username">Username</label>
+        <input class="form-control" name="Username" />
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input class="form-control" name="Password" />
+    </div>
+    <div class="form-group">
+        <label for="UserEmail">Email</label>
+        <input class="form-control" name="UserEmail" />
+    </div>
+    <div class="form-group">
+        <label for="FirstName">First Name </label>
+        <input class="form-control" name="FirstName" />
+    </div>
+    <div class="form-group">
+        <label for="LastName">Last Name</label>
+        <input class="form-control" name="LastName" />
+    </div>
+    <div class="form-group">
+        <label for="Picture">Picture</label>
+        <input class="form-control" name="Picture" />
+    </div>
+    <div class="form-group">
+        <label for="Gender">Gender</label>
+        <input class="form-control" name="Gender" />
+    </div>
+    <br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+        <a class="btn btn-sm btn-secondary" asp-action="Index">Back</a>
+    </div>
+</form>
+
+<h3 class="alert">@ViewBag.Result</h3>

@@ -1,0 +1,28 @@
+﻿@inject IHttpContextAccessor httpContextaccessor
+
+@{
+    var currentUser = httpContextaccessor.HttpContext.Request.Cookies["CurrentUserEmail"];
+}
+
+<ul class="navbar-nav">
+    @if (@currentUser != null)
+    {
+        <li class="nav-item">
+            <a id="manage" class="nav-link" asp-controller="User" asp-action="Index" title="Manage">Hello @currentUser!</a>
+        </li>
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" id="register" asp-controller="Account" asp-action="Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="login" asp-controller="Account" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>
