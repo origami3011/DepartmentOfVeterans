@@ -3,6 +3,7 @@ using DepartmentOfVeterans.WebMVC.Models.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text;
@@ -11,14 +12,15 @@ namespace DepartmentOfVeterans.WebMVC.Controllers
 {
     public class UserController : Controller
     {
-        private readonly string _userRestAPI = "https://localhost:7227/api/User";
         private readonly string _randomRserRestAPI = "https://localhost:7227/api/RandomUser/Pagination";
 
         private readonly IUserDataService _userDataService;
+        private readonly ILogger<AccountController> _logger;
 
-        public UserController(IUserDataService userDataService)
+        public UserController(IUserDataService userDataService, ILogger<AccountController> logger)
         {
             _userDataService = userDataService;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -30,12 +32,24 @@ namespace DepartmentOfVeterans.WebMVC.Controllers
         public ViewResult AddUser() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddUser(UserViewModel User)
         {
             if (ModelState.IsValid)
             {
-                var uuid = await _userDataService.CreateUser(User);
-                ViewBag.Result = "Success";
+                try
+                {
+                    var apiResponse = await _userDataService.CreateUser(User);
+                    if (apiResponse.Success)
+                        ViewBag.Result = "Success";
+                    else
+                        ModelState.AddModelError("Error", apiResponse.ValidationErrors ?? apiResponse.Message);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"AddUser : error {ex.Message}");
+                }
+
             }
             return View(User);
         }
@@ -52,8 +66,18 @@ namespace DepartmentOfVeterans.WebMVC.Controllers
             var currentUser = await _userDataService.GetUserById(User.UserId);
             if (currentUser != null)
             {
-                var uuid = await _userDataService.UpdateUser(User);                
-                return RedirectToAction("Index");
+                try
+                {
+                    var apiResponse = await _userDataService.UpdateUser(User);
+                    if (apiResponse.Success)
+                        return RedirectToAction("Index");
+                    else
+                        ModelState.AddModelError("Error", apiResponse.ValidationErrors ?? apiResponse.Message);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"UpdateUser : Username {User.UserName} error {ex.Message}");
+                }
             }
             else
                 ModelState.AddModelError("", "User Not Found");
@@ -63,10 +87,19 @@ namespace DepartmentOfVeterans.WebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteUser(Guid UserId)
         {
-            var uuid = await _userDataService.DeleteUser(UserId);
+            try { var uuid = await _userDataService.DeleteUser(UserId); }
+            catch (Exception ex) { _logger.LogError($"DeleteUser : error {ex.Message}"); }
+
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// This should be called from _userDataService to avoid DRY pattern, this is a example of DRY vaiolation
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="results"></param>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public async Task<IActionResult> LoadRandomUsers(int page = 1, int results = 10, string seed = "abc")
         {
             var users = new RandomUser();

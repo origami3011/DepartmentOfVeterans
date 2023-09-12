@@ -20,6 +20,8 @@ namespace DepartmentOfVeterans.WebMVC.Models
         [StringLength(50, ErrorMessage = "The user name should be 50 characters or less")]
         public string UserName { get; set; } = string.Empty;
 
+        [Required]
+        [MinLength(6, ErrorMessage = "The password should have a minimum length of 6 characters")]
         public string Password { get; set; } = string.Empty;
     }
 }

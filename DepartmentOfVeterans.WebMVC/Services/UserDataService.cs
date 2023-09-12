@@ -26,6 +26,8 @@ namespace DepartmentOfVeterans.WebMVC.Services
 
         public async Task<UserViewModel> GetUserById(Guid id)
         {
+            AddBearerToken();
+
             var selectedUser = await _client.GetUserByIdAsync(id);
             var mappedUser = _mapper.Map<UserViewModel>(selectedUser);
             return mappedUser;
@@ -35,6 +37,8 @@ namespace DepartmentOfVeterans.WebMVC.Services
         {
             try
             {
+                AddBearerToken();
+
                 CreateUserCommand createUserCommand = _mapper.Map<CreateUserCommand>(UserViewModel);
                 var newId = await _client.CreateUserAsync(createUserCommand);
                 return new ApiResponse<Guid>() { Data = newId, Success = true };
@@ -49,6 +53,8 @@ namespace DepartmentOfVeterans.WebMVC.Services
         {
             try
             {
+                AddBearerToken();
+
                 UpdateUserCommand updateUserCommand = _mapper.Map<UpdateUserCommand>(UserViewModel);
                 await _client.UpdateUserAsync(updateUserCommand);
                 return new ApiResponse<Guid>() { Success = true };
@@ -63,6 +69,8 @@ namespace DepartmentOfVeterans.WebMVC.Services
         {
             try
             {
+                AddBearerToken();
+
                 await _client.DeleteUserAsync(id);
                 return new ApiResponse<Guid>() { Success = true };
             }

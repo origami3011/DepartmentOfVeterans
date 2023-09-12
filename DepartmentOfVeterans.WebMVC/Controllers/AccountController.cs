@@ -11,10 +11,13 @@ namespace DepartmentOfVeterans.WebMVC.Controllers
     public class AccountController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAuthenticationService authenticationService)
+
+        public AccountController(IAuthenticationService authenticationService, ILogger<AccountController> logger)
         {
             _authenticationService = authenticationService;
+            _logger = logger;
         }
 
         public ViewResult Login() => View();
@@ -24,11 +27,16 @@ namespace DepartmentOfVeterans.WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel login)
         {
+            _logger.LogInformation("Register : validating user... ");
+
             if (ModelState.IsValid)
             {
                 var token = await _authenticationService.Authenticate(login.Email, login.Password);
                 if (token != string.Empty)
                 {
+
+                    _logger.LogInformation($"Login successfuly {login.Email}");
+
                     //  store token and current email to cookies
                     Response.Cookies.Append("X-Access-Token", token, new CookieOptions
                     {
@@ -55,19 +63,33 @@ namespace DepartmentOfVeterans.WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel login)
         {
+            _logger.LogInformation("Register : validating user... ");
+
             if (ModelState.IsValid)
             {
-                var response = await _authenticationService.Register(login.FirstName, login.LastName, login.UserName, login.Email, login.Password);
+                try
+                {
+                    var response = await _authenticationService.Register(login.FirstName, login.LastName, login.UserName, login.Email, login.Password);
 
-                if (response.Success)
-                {
-                    return RedirectToAction("Login");    // return to Login screen
+                    if (response.Success)
+                    {
+                        return RedirectToAction("Login");    // return to Login screen
+                    }
+                    else
+                    {
+                        string[] error = response.Message.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (string errorItem in error)
+                        {
+                            ModelState.AddModelError("Error", errorItem);
+                        }
+                        _logger.LogInformation($"Register : error {response.Message}");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ViewBag.Message = response.Message;
-                    ModelState.AddModelError("Error", response.Message);
+                    _logger.LogError($"Register : error {ex.Message}");
                 }
+                
             }
             return View(login);
         }

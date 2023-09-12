@@ -25,6 +25,10 @@ namespace DepartmentOfVeterans.WebMVC.Services.Base
             {
                 return new ApiResponse<Guid>() { Message = "The requested item could not be found.", Success = false };
             }
+            else if (ex.StatusCode == 401)
+            {
+                return new ApiResponse<Guid>() { Message = "Please login to use application ", Success = false };
+            }
             else
             {
                 return new ApiResponse<Guid>() { Message = "Something went wrong, please try again.", Success = false };

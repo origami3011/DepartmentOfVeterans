@@ -88,7 +88,10 @@ namespace DepartmentOfVeterans.Identity.Services
                     }
                     else
                     {
-                        response.Message = $"{result.Errors}";
+                        foreach(var error in result.Errors)
+                        {
+                            response.Message += error.Description + "\n";                              
+                        }
                     }
                 }
                 else

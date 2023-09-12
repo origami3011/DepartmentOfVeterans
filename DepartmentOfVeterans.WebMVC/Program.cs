@@ -6,6 +6,15 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
+
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
+Log.Information("DepartmentOfVeterans WebMVC starting");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -42,6 +51,11 @@ builder.Services.AddHttpClient<Client>().AddHttpMessageHandler<CustomAuthorizati
 builder.Services.AddScoped<IUserDataService, UserDataService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
+
+builder.Host.UseSerilog((context, loggerConfiguration) => loggerConfiguration
+     .WriteTo.Console()
+     .ReadFrom.Configuration(context.Configuration));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -52,6 +66,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
