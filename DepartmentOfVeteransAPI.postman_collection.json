@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "4c8ae997-f302-47fd-be6f-45b0c7fb9fcf",
+		"name": "DepartmentOfVeteransAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Identity",
+			"item": [
+				{
+					"name": "01 - Authenticate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer 12345abcdef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"ltruong@example.com\",\r\n  \"password\": \"Sogoku95_\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7227/api/Account/register",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7227",
+							"path": [
+								"api",
+								"Account",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02 - Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Reingard\",\r\n  \"lastName\": \"Hardy\",\r\n  \"email\": \"reingard.h@example.com\",\r\n  \"userName\": \"bluedog721\",\r\n  \"password\": \"Sogoku95_\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7227/api/Account/register",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7227",
+							"path": [
+								"api",
+								"Account",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserDemographic",
+			"item": [
+				{
+					"name": "CreateUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer 12345abcdef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Nobitavn\",\r\n    \"userEmail\": \"sogoku@example.com\",\r\n    \"userPassword\": \"Sogoku95_\",\r\n    \"firstName\": \"Leon\",\r\n    \"lastName\": \"Ly\",\r\n    \"picture\": \"https://randomuser.me/api/portraits/med/men/6.jpg\",\r\n    \"gender\": \"male\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7227/api/User/CreateUser",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7227",
+							"path": [
+								"api",
+								"User",
+								"CreateUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n    \"userName\": \"Nobitavn6\",\r\n    \"userEmail\": \"sogoku6@example.com\",\r\n    \"userPassword\": \"Sogoku95_\",\r\n    \"firstName\": \"Leon\",\r\n    \"lastName\": \"Ly\",\r\n    \"picture\": \"https://randomuser.me/api/portraits/med/men/6.jpg\",\r\n    \"gender\": \"male\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7227/api/User/UpdateUser",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7227",
+							"path": [
+								"api",
+								"User",
+								"UpdateUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7227/api/User/GetAllUsers",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7227",
+							"path": [
+								"api",
+								"User",
+								"GetAllUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RandomUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7227/api/RandomUser/Pagination?page=1&results=3&seed=abc",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7227",
+							"path": [
+								"api",
+								"RandomUser",
+								"Pagination"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "results",
+									"value": "3"
+								},
+								{
+									"key": "seed",
+									"value": "abc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserDetail",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7227/api/User/3540f776-84dd-4dcd-a90b-0f72203dd574",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7227",
+							"path": [
+								"api",
+								"User",
+								"3540f776-84dd-4dcd-a90b-0f72203dd574"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
